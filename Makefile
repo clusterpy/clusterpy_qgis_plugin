@@ -25,7 +25,7 @@ QGISDIR=.qgis2
 # Makefile for a PyQGIS plugin
 
 # translation
-SOURCES = clusterpy_light.py ui_clusterpy_light.py __init__.py clusterpy_lightdialog.py
+SOURCES = clusterpy_light.py __init__.py clusterpy_lightdialog.py
 #TRANSLATIONS = i18n/clusterpy_light_en.ts
 TRANSLATIONS =
 
@@ -37,7 +37,7 @@ PY_FILES = clusterpy_light.py clusterpy_lightdialog.py __init__.py
 
 EXTRAS = icon.png metadata.txt
 
-UI_FILES = ui_clusterpy_light.py ui_maxp.py ui_minp.py
+UI_FILES = ui_maxp.py ui_minp.py
 
 RESOURCE_FILES = resources_rc.py
 
