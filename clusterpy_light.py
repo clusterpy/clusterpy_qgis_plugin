@@ -29,9 +29,7 @@ import resources_rc
 from clusterpy_lightdialog import maxpDialog, minpDialog
 import os.path
 
-
 class clusterpy_light:
-
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
 
     def __init__(self, iface):
@@ -49,10 +47,12 @@ class clusterpy_light:
 
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-
         # Create the dialog (after translation) and keep reference
+        self.mc = self.iface.mapCanvas()
         self.maxpdlg = maxpDialog()
-        self.minpdlg = minpDialog()
+        self.maxpdlg.mc = self.mc
+
+        #self.minpdlg = minpDialog()
 
     def initGui(self):
         default_icon = QIcon(":/plugins/clusterpy_light/icon.png")
@@ -73,19 +73,20 @@ class clusterpy_light:
         self.iface.removePluginMenu(self.CLSP_MENU, self.minpaction)
 
     def maxp(self):
-        # show the dialog
         self.maxpdlg.show()
-        # Run the dialog event loop
+        self.maxpdlg.layer_combo.clear()
+        self.maxpdlg.layer_combo.addItems([x.name() for x in self.mc.layers()])
+
         result = self.maxpdlg.exec_()
         # See if OK was pressed
         if result == 1:
             pass
 
-    def minp(self):
-        # show the dialog
-        self.minpdlg.show()
-        # Run the dialog event loop
-        result = self.minpdlg.exec_()
-        # See if OK was pressed
-        if result == 1:
-            pass
+    #def minp(self):
+    #    # show the dialog
+    #    self.minpdlg.show()
+    #    # Run the dialog event loop
+    #    result = self.minpdlg.exec_()
+    #    # See if OK was pressed
+    #    if result == 1:
+    #        pass
