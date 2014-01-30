@@ -47,7 +47,7 @@ class ClusterpyFeature:
 
         A feature is never considered to be its own neighbor. If the set
         contains it, it will be removed.
-        """        
+        """
         if uid in neighbors:
             neighbors.remove(uid)
 
@@ -90,7 +90,7 @@ class ClusterpyMap(list):
         copies of the features to ensure consistency.
         This method will work as a copy.deepcopy but without going to the last
         level (the ClusterpyFeature)
-        
+
         Returns a new copy of the ClusterpyMap
         """
         clone = ClusterpyMap()
@@ -244,7 +244,7 @@ def assignenclaves(partitions, enclaves, assignedfeatures):
         for feat in enclaves:
             _tmpneighbors = feat.neighbors.intersection(assignedfeatures.ids)
             if len(_tmpneighbors) > 0:
-                assignedneighbor = [LAYERFEATURES[uid] for uid in _tmpneighbors] 
+                assignedneighbor = [LAYERFEATURES[uid] for uid in _tmpneighbors]
                 feature = feat
                 break
         neighborregions = list()
@@ -261,7 +261,7 @@ def assignenclaves(partitions, enclaves, assignedfeatures):
 
 def localsearch(regions, tabulength, maxtabusteps):
     """ Local search phase in Max-p. TabuMove [Not to be called explicitly] """
-    bestregions = regions 
+    bestregions = regions
     tmpregions = regions.clone()
     tabulist = list()
     tabusteps = 0
@@ -285,7 +285,7 @@ def localsearch(regions, tabulength, maxtabusteps):
                     bestregions = tmpregions.clone()
                     tabusteps = 0
                 else:
-                    destregion.remove(randomfeature)    
+                    destregion.remove(randomfeature)
                     inregion.add(randomfeature)
             tabulist[:] = tabulist[-tabulength:]
         else:
@@ -320,7 +320,7 @@ def selectnextregion(possibleregions, featuretoadd):
     Parameters are:
     [1] possibleregions -> list of sets containing clusterpyfeatures, the region
     [2] featuretoadd    -> clusterpyfeature, candidate to join a region
-    
+
     Returns a ClusterpyRegion
     [Not to be called explicitly]
     """
@@ -377,7 +377,7 @@ def randomcandidatefeature(clspmap):
     the current region and the region.
     Parameters are:
     [1] clspmap -> A ClusterpyMap
-    
+
     Returns a ClusterpyFeature its region and neighboring regions tuple or None
     [Not to be called explicitly]
     """
@@ -396,11 +396,11 @@ def featureneighborregions(regions, feature, fromregion):
     [1] regions     -> A ClusterpyMap
     [2] feature     -> A ClusterpyFeature
     [3] fromregion  -> A ClusterpyRegion
-    
+
     Returns a list of ClusterpyRegions
     """
     _tmpneighbors = feature.neighbors.difference(fromregion.ids)
-    assignedneighbor = [LAYERFEATURES[uid] for uid in _tmpneighbors] 
+    assignedneighbor = [LAYERFEATURES[uid] for uid in _tmpneighbors]
     neighborregions = list()
     for partition in regions:
         for neighbor in assignedneighbor:
