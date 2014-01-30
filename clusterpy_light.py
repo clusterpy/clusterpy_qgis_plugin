@@ -29,6 +29,8 @@ import resources_rc
 from clusterpy_lightdialog import maxpDialog, minpDialog
 import os.path
 
+from clusterpy import ClusterpyFeature, execmaxp
+
 class clusterpy_light:
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
 
@@ -76,17 +78,47 @@ class clusterpy_light:
         self.maxpdlg.show()
         self.maxpdlg.layer_combo.clear()
         self.maxpdlg.layer_combo.addItems([x.name() for x in self.mc.layers()])
-
         result = self.maxpdlg.exec_()
-        # See if OK was pressed
         if result == 1:
-            pass
+            layerindex = self.maxpdlg.layer_combo.currentIndex()
+            attrname = self.maxpdlg.attribute_combo.currentText()
+            thresholdattr = self.maxpdlg.threshold_attr_combo.currentText()
+            threshold = self.maxpdlg.threshold_spin.value()
+            maxit = self.maxpdlg.maxit_spin.value()
+            tabumax = self.maxpdlg.tabumax_spin.value()
+            tabusize = self.maxpdlg.tabulength_spin.value()
 
-    #def minp(self):
+            layer = self.mc.layer(layerindex)
+            provider = layer.dataProvider()
+            maxpfield = QgsField(name = "MAXP", type = 2)
+            newfields = QgsFields()
+            newfields.extend(provider.fields())
+            newfields.append(maxpfield)
+
+            clspyfeatures = {}
+            for feat in provider.getFeatures():
+                uid = feat.id()
+                featids = []
+                for _ftr in provider.getFeatures():
+                    if feat != _ftr and feat.geometry().touches(_ftr.geometry()):
+                        featids.append(_ftr.id())
+                neighbors = set(featids)
+                neighbors.discard(uid)
+                thresholdval = feat.attribute(thresholdattr)
+                attributeval = feat.attribute(attrname)
+                clspyfeatures[uid] = ClusterpyFeature(uid, thresholdval,
+                                                    neighbors, attributeval)
+
+            regions = execmaxp(clspyfeatures, threshold, maxit, tabusize, tabumax)
+            print regions
+        #import rpdb
+        #rpdb.set_trace()
+
+    def minp(self):
     #    # show the dialog
     #    self.minpdlg.show()
     #    # Run the dialog event loop
     #    result = self.minpdlg.exec_()
     #    # See if OK was pressed
     #    if result == 1:
-    #        pass
+            pass
