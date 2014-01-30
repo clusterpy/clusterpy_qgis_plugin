@@ -76,7 +76,7 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
                 minimum = val if val < minimum else minimum
                 maximum += val
 
-            self.threshold_value_spin.setMinimum(minimum)
-            self.threshold_value_spin.setMaximum(maximum)
-            self.threshold_value_spin.setValue((maximum - minimum)/2.0)
+            self.threshold_spin.setMinimum(minimum)
+            self.threshold_spin.setMaximum(maximum)
+            self.threshold_spin.setValue((maximum - minimum)/2.0)
 

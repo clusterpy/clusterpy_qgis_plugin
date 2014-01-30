@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>maxp_ui</class>
- <widget class="QDialog" name="maxp_ui">
+ <class>minp_ui</class>
+ <widget class="QDialog" name="minp_ui">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -110,7 +110,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QDoubleSpinBox" name="threshold_value_spin">
+        <widget class="QDoubleSpinBox" name="threshold_spin">
          <property name="value">
           <double>99.989999999999995</double>
          </property>
@@ -246,7 +246,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>maxp_ui</receiver>
+   <receiver>minp_ui</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -262,7 +262,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>maxp_ui</receiver>
+   <receiver>minp_ui</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -294,7 +294,7 @@
   <connection>
    <sender>threshold_attr_combo</sender>
    <signal>currentIndexChanged(int)</signal>
-   <receiver>threshold_value_spin</receiver>
+   <receiver>threshold_spin</receiver>
    <slot>update()</slot>
    <hints>
     <hint type="sourcelabel">
