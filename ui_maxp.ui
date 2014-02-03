@@ -7,13 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>422</width>
-    <height>489</height>
+    <height>578</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>422</width>
-    <height>489</height>
+    <height>578</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>422</width>
+    <height>578</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -23,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>440</y>
+     <y>530</y>
      <width>166</width>
      <height>33</height>
     </rect>
@@ -239,6 +245,55 @@
      </property>
     </widget>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="browse_button">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>470</y>
+     <width>80</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Browse</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="layer_path">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>470</y>
+     <width>241</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="add_canvas">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>500</y>
+     <width>341</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add to map canvas</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>450</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Output layer</string>
+   </property>
   </widget>
  </widget>
  <resources/>
