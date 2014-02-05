@@ -21,8 +21,10 @@
 """
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import Qt
 from ui_maxp import Ui_maxp_ui
 from ui_minp import Ui_minp_ui
+from plugin_utils import saveDialog
 
 class minpDialog(QtGui.QDialog, Ui_minp_ui):
     def __init__(self):
@@ -45,6 +47,10 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
         self.connect(self.layer_combo,
                         QtCore.SIGNAL("currentIndexChanged(int)"),
                         self.updateAttrCombo)
+
+        self.connect(self.browse_button,
+                        QtCore.SIGNAL("clicked()"),
+                        self.openOutputDialog)
 
     def updateAttrCombo(self, newindex):
         if newindex > -1:
@@ -78,5 +84,18 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
 
             self.threshold_spin.setMinimum(minimum)
             self.threshold_spin.setMaximum(maximum)
-            self.threshold_spin.setValue((maximum - minimum)/2.0)
+            self.threshold_spin.setValue((maximum - minimum)/3.0)
+
+    def openOutputDialog(self):
+        self.layer_path.clear()
+        fileName, encoding = saveDialog(self)
+        if fileName is None or encoding is None:
+            return
+        self.layer_path.setText(fileName)
+
+    def addToCanvas(self):
+        add = False
+        if self.add_canvas.checkState() == Qt.Checked:
+            add = True
+        return add
 
