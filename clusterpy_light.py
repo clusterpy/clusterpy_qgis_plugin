@@ -30,6 +30,7 @@ from clusterpy_lightdialog import maxpDialog, minpDialog
 import os.path
 
 from clusterpy import ClusterpyFeature, execmaxp
+from plugin_utils import addShapeToCanvas
 
 class clusterpy_light:
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
@@ -109,10 +110,30 @@ class clusterpy_light:
                 clspyfeatures[uid] = ClusterpyFeature(uid, thresholdval,
                                                     neighbors, attributeval)
 
-            regions = execmaxp(clspyfeatures, threshold, maxit, tabusize, tabumax)
-            print regions
-        #import rpdb
-        #rpdb.set_trace()
+            regions = execmaxp(clspyfeatures,
+                                    threshold,
+                                    maxit,
+                                    tabusize,
+                                    tabumax)
+
+            output_path = self.maxpdlg.layer_path.text()
+            newlayer = QgsVectorFileWriter( output_path,
+                                            None,
+                                            newfields,
+                                            provider.geometryType(),
+                                            provider.crs())
+
+            for area in layer.getFeatures():
+                newarea = QgsFeature()
+                newarea.setGeometry(area.geometry())
+                attrs = area.attributes()
+                attrs.append(regions[area.id()])
+                newarea.setAttributes(attrs)
+                newlayer.addFeature(newarea)
+
+            del newlayer
+            if self.maxpdlg.addToCanvas():
+                addShapeToCanvas(output_path)
 
     def minp(self):
     #    # show the dialog
