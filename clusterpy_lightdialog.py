@@ -22,8 +22,8 @@
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt
-from ui_maxp import Ui_maxp_ui
-from ui_minp import Ui_minp_ui
+from uifiles.ui_maxp import Ui_maxp_ui
+from uifiles.ui_minp import Ui_minp_ui
 from plugin_utils import saveDialog
 
 class minpDialog(QtGui.QDialog, Ui_minp_ui):
