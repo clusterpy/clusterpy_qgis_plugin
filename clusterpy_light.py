@@ -42,7 +42,9 @@ class clusterpy_light:
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
         locale = QSettings().value("locale/userLocale")[0:2]
-        localePath = os.path.join(self.plugin_dir, 'i18n', 'clusterpy_light_{}.qm'.format(locale))
+        localePath = os.path.join(self.plugin_dir,
+                                    'i18n',
+                                    'clusterpy_light_{}.qm'.format(locale))
 
         if os.path.exists(localePath):
             self.translator = QTranslator()
@@ -69,11 +71,11 @@ class clusterpy_light:
         self.minpaction.triggered.connect(self.minp)
 
         self.iface.addPluginToMenu(self.CLSP_MENU, self.maxpaction)
-        self.iface.addPluginToMenu(self.CLSP_MENU, self.minpaction)
+        #self.iface.addPluginToMenu(self.CLSP_MENU, self.minpaction)
 
     def unload(self):
         self.iface.removePluginMenu(self.CLSP_MENU, self.maxpaction)
-        self.iface.removePluginMenu(self.CLSP_MENU, self.minpaction)
+        #self.iface.removePluginMenu(self.CLSP_MENU, self.minpaction)
 
     def maxp(self):
         self.maxpdlg.show()
