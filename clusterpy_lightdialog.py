@@ -52,6 +52,9 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
                         QtCore.SIGNAL("clicked()"),
                         self.openOutputDialog)
 
+        helpfile = open('./uifiles/maxphelp.html').read()
+        self.help_browser.setHtml(helpfile)
+
     def updateAttrCombo(self, newindex):
         if newindex > -1:
             self.attribute_combo.clear()
