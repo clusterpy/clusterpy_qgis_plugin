@@ -1,5 +1,8 @@
 <RCC>
-    <qresource prefix="/plugins/clusterpy_light" >
-        <file>icon.png</file>
+    <qresource prefix="/plugins/clusterpy_light"/>
+    <qresource prefix="/">
+        <file>uifiles/icon.png</file>
+        <file>uifiles/rise1.png</file>
+        <file>uifiles/clusterpy.png</file>
     </qresource>
 </RCC>
