@@ -1,31 +1,33 @@
-Plugin Builder Results
+#Clusterpy QGIS plugin
 
-Your QGIS plugin directory is located at:
-    /home/rise/.qgis2/python/plugins
+##Description
+This plugin brings the functionality from clusterpy, a library of spatially
+constrained clustering algorithms, to the powerful [QGIS](http://www.qgis.org/),
+a free and Open Source Geographic Information System.
 
-What's Next:
+##Current Algorithms
+ * Max-p-regions (Tabu): Duque, Anselin and Rey (2010)
+ * more algorithms soon.
 
-  * Copy the entire directory containing your new plugin to the QGIS plugin
-    directory
+##Installation
+Available from the QGIS plugin repository.
 
-  * Compile the ui file using pyuic4
-
-  * Compile the resources file using pyrcc4
-
-  * Test the plugin by enabling it in the QGIS plugin manager
-
-  * Customize it by editing the implementation file:
-         clusterpy_light.py
-
-  * Create your own custom icon, replacing the default icon.png
-
-  * Modify your user interface by opening clusterpy_light.ui
-    in Qt Designer (don't forget to compile it with pyuic4 after changing it)
-
-  * You can use the Makefile to compile your Ui and resource files when
-    you make changes. This requires GNU make (gmake)
-
-For more information, see the PyQGIS Developer Cookbook at:
+##More information
+For plugin developer information, see the PyQGIS Developer Cookbook at:
 http://www.qgis.org/pyqgis-cookbook/index.html
 
-(C) 2011-2014 GeoApt LLC - geoapt.com
+##License
+Clusterpy-qgis-plugin is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+any later version.
+
+Clusterpy-qgis-plugin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Clusterpy-qgis-plugin. [GNU Licenses](http://www.gnu.org/licenses/)
+
+(C) 2014 RISE Group Universidad EAFIT
