@@ -1,0 +1,31 @@
+<img src=":/uifiles/clusterpy.png">
+<h1>Max-p-regions model (Tabu)</h1>
+<p>The max-p-regions model, devised by
+ <a href="http://www.rise-group.org/risem/clusterpy/index.html#duque-anselin-rey2010">Duque_Anselin_Rey2010</a>,
+ clusters a set of geographic areas into the maximum number of homogeneous
+ regions such that the value of a spatially extensive regional attribute
+ is above a predefined threshold value. In clusterPy we measure heterogeneity
+ as the within-cluster sum of squares from each area to the attribute
+centroid of its cluster.
+</p>
+
+<h2>Algorithm</h2>
+<p>The max-p-regions algorithm is composed of two main blocks:</p>
+<ul>
+    <li>Construction of a initial feasible solution.</li>
+    <li>Local improvement.</li>
+</ul>
+
+<h2>Parameters</h2>
+<ul>
+    <li><b>Clustering attribute:</b> Area attribute to cluster.</li>
+    <li><b>Threshold attribute:</b> Is the spatially extensive attribute that
+ will beconstrained to be above the Threshold value.</li>
+    <li><b>threshold value:</b> Minimum value of the constrained variable at
+ regional level.</li>
+    <li><b>Maximum iterations:</b> Number of times that the construction phase is
+ repeated. The larger the value the higher the possibility of getting
+ a largenumber of regions.</li>
+    <li><b>Tabu maximum steps:</b> Number of steps for the Tabu procedure.</li>
+    <li><b>Tabu List length:</b> Number of times a reverse move is prohibited</li>
+</ul>
