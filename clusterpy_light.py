@@ -26,7 +26,7 @@ from qgis.core import *
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
-from clusterpy_lightdialog import maxpDialog, minpDialog
+from clusterpy_lightdialog import maxpDialog, minpDialog, aboutDialog
 import os.path
 
 from clusterpy import ClusterpyFeature, execmaxp
@@ -57,25 +57,35 @@ class clusterpy_light:
         self.maxpdlg = maxpDialog()
         self.maxpdlg.mc = self.mc
 
+        self.aboutdlg = aboutDialog()
         #self.minpdlg = minpDialog()
 
     def initGui(self):
-        default_icon = QIcon(":/plugins/clusterpy_light/icon.png")
+        default_icon = QIcon(":/uifiles/clusterpy.png")
+        rise_icon = QIcon(":/uifiles/rise1.png")
 
         self.maxpaction = QAction(default_icon, u"Max-p Algorithm",
                                                     self.iface.mainWindow())
         self.maxpaction.triggered.connect(self.maxp)
 
-        self.minpaction = QAction(default_icon, u"Min-p Algorithm",
+        #self.minpaction = QAction(default_icon, u"Min-p Algorithm",
+                                                    #self.iface.mainWindow())
+        #self.minpaction.triggered.connect(self.minp)
+        self.aboutaction = QAction(rise_icon, u"About RISE",
                                                     self.iface.mainWindow())
-        self.minpaction.triggered.connect(self.minp)
+        self.aboutaction.triggered.connect(self.about)
 
         self.iface.addPluginToMenu(self.CLSP_MENU, self.maxpaction)
+        self.iface.addPluginToMenu(self.CLSP_MENU, self.aboutaction)
         #self.iface.addPluginToMenu(self.CLSP_MENU, self.minpaction)
 
     def unload(self):
         self.iface.removePluginMenu(self.CLSP_MENU, self.maxpaction)
+        self.iface.removePluginMenu(self.CLSP_MENU, self.aboutaction)
         #self.iface.removePluginMenu(self.CLSP_MENU, self.minpaction)
+
+    def about(self):
+        self.aboutdlg.show()
 
     def maxp(self):
         self.maxpdlg.show()
