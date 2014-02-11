@@ -23,17 +23,21 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
+from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
 from clusterpy_lightdialog import maxpDialog, minpDialog, aboutDialog
 import os.path
 
-from clusterpy import ClusterpyFeature, execmaxp
+from clusterpy import ClusterpyFeature, execmaxp, validtopology
 from plugin_utils import addShapeToCanvas
 
 class clusterpy_light:
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
+    ERROR_MSG = u"There are features from the shapefile that are disconnected. \
+                Check the following areas for errors in the geometry: "
+    DONE_MSG = "Finish"
 
     def __init__(self, iface):
         # Save reference to the QGIS interface
@@ -94,6 +98,7 @@ class clusterpy_light:
         result = self.maxpdlg.exec_()
         layerindex = self.maxpdlg.layer_combo.currentIndex()
         if result == 1 and layerindex > -1:
+            messagebar = self.iface.messageBar()
             attrname = self.maxpdlg.attribute_combo.currentText()
             thresholdattr = self.maxpdlg.threshold_attr_combo.currentText()
             threshold = self.maxpdlg.threshold_spin.value()
@@ -122,6 +127,12 @@ class clusterpy_light:
                 clspyfeatures[uid] = ClusterpyFeature(uid, thresholdval,
                                                     neighbors, attributeval)
 
+            valid, islands = validtopology(clspyfeatures)
+            if not valid:
+                messagebar.pushMessage("Topology Error",
+                                        self.ERROR_MSG + str(islands),
+                                        level=QgsMessageBar.CRITICAL)
+                return
             regions = execmaxp(clspyfeatures,
                                     threshold,
                                     maxit,
@@ -146,6 +157,10 @@ class clusterpy_light:
             del newlayer
             if self.maxpdlg.addToCanvas():
                 addShapeToCanvas(output_path)
+            messagebar.pushMessage("Clusterpy",
+                                    self.DONE_MSG,
+                                    level=QgsMessageBar.INFO,
+                                    duration = 3)
 
     def minp(self):
     #    # show the dialog
