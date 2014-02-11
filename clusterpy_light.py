@@ -92,8 +92,8 @@ class clusterpy_light:
         self.maxpdlg.layer_combo.clear()
         self.maxpdlg.layer_combo.addItems([x.name() for x in self.mc.layers()])
         result = self.maxpdlg.exec_()
-        if result == 1:
-            layerindex = self.maxpdlg.layer_combo.currentIndex()
+        layerindex = self.maxpdlg.layer_combo.currentIndex()
+        if result == 1 and layerindex > -1:
             attrname = self.maxpdlg.attribute_combo.currentText()
             thresholdattr = self.maxpdlg.threshold_attr_combo.currentText()
             threshold = self.maxpdlg.threshold_spin.value()
