@@ -19,7 +19,7 @@ __copyright__ = '(C) 2014, RiSE Group'
 
 __revision__ = '$Format:%H$'
 
-__all__ = ['execmaxp', 'ClusterpyFeature']
+__all__ = ['execmaxp', 'ClusterpyFeature', 'validtopology']
 
 from random import choice, sample
 
@@ -409,3 +409,28 @@ def featureneighborregions(regions, feature, fromregion):
                 break
     return neighborregions
 
+def validtopology(features):
+    """ Checks if the topology of the shapefile is valid for running
+    Clusterpy.
+    Parameters are:
+    [1] A dictionary of ClusterpyFeature
+
+    Returns a tuple. A boolean value: True if valid, False otherwise.
+    And an array containing the uids of the features causing trouble.
+    """
+    topology = { }
+    feature = None
+    for feature in features.values():
+        if len(feature.neighbors) < 1:
+            return False, [feature.uid]
+        topology[feature.uid] = feature.neighbors
+
+    tovisit = set([feature.uid])
+    visitedareas = set([feature.uid])
+    while len(tovisit) > 0:
+        area = tovisit.pop()
+        visitedareas.add(area)
+        tovisit.update(topology[area])
+        tovisit.difference_update(visitedareas)
+    islands = visitedareas.symmetric_difference(topology.keys())
+    return len(islands) == 0, list(islands)
