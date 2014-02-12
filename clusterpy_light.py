@@ -29,6 +29,7 @@ import os.path
 
 from clusterpy import ClusterpyFeature, execmaxp, validtopology
 from plugin_utils import addShapeToCanvas
+import workers
 
 class clusterpy_light:
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
@@ -86,66 +87,20 @@ class clusterpy_light:
         layerindex = self.maxpdlg.layer_combo.currentIndex()
         if result == 1 and layerindex > -1:
             layerindex = self.maxpdlg.layer_combo.currentIndex()
-            messagebar = self.iface.messageBar()
-            attrname = self.maxpdlg.attribute_combo.currentText()
-            thresholdattr = self.maxpdlg.threshold_attr_combo.currentText()
-            threshold = self.maxpdlg.threshold_spin.value()
-            maxit = self.maxpdlg.maxit_spin.value()
-            tabumax = self.maxpdlg.tabumax_spin.value()
-            tabusize = self.maxpdlg.tabulength_spin.value()
-
-            output_path = self.maxpdlg.layer_path.text()
-            layer = self.mc.layer(layerindex)
-            provider = layer.dataProvider()
-            maxpfield = QgsField(name = "MAXP", type = 2)
-            newfields = QgsFields()
-            newfields.extend(provider.fields())
-            newfields.append(maxpfield)
-
-            clspyfeatures = {}
-            for feat in provider.getFeatures():
-                uid = feat.id()
-                featids = []
-                for _ftr in provider.getFeatures():
-                    if feat != _ftr and feat.geometry().touches(_ftr.geometry()):
-                        featids.append(_ftr.id())
-                neighbors = set(featids)
-                neighbors.discard(uid)
-                thresholdval = feat.attribute(thresholdattr)
-                attributeval = feat.attribute(attrname)
-                clspyfeatures[uid] = ClusterpyFeature(uid, thresholdval,
-                                                    neighbors, attributeval)
-
-            valid, islands = validtopology(clspyfeatures)
-            if not valid:
-                self.showMessage("Topology Error",
-                            self.ERROR_MSG + str(islands),
-                            level=QgsMessageBar.CRITICAL)
-                return
-            regions = execmaxp(clspyfeatures,
-                                    threshold,
-                                    maxit,
-                                    tabusize,
-                                    tabumax)
-
-            newlayer = QgsVectorFileWriter( output_path,
-                                            None,
-                                            newfields,
-                                            provider.geometryType(),
-                                            provider.crs())
-
-            for area in layer.getFeatures():
-                newarea = QgsFeature()
-                newarea.setGeometry(area.geometry())
-                attrs = area.attributes()
-                attrs.append(regions[area.id()])
-                newarea.setAttributes(attrs)
-                newlayer.addFeature(newarea)
-
-            del newlayer
-            if self.maxpdlg.addToCanvas():
-                addShapeToCanvas(output_path)
-            self.showMessage("Clusterpy", self.DONE_MSG, duration = 3)
+            info = {
+                'attrname' : self.maxpdlg.attribute_combo.currentText(),
+                'thresholdattr' :
+                               self.maxpdlg.threshold_attr_combo.currentText(),
+                'threshold' : self.maxpdlg.threshold_spin.value(),
+                'maxit' : self.maxpdlg.maxit_spin.value(),
+                'tabumax' : self.maxpdlg.tabumax_spin.value(),
+                'tabusize' : self.maxpdlg.tabulength_spin.value(),
+                'output_path' : self.maxpdlg.layer_path.text(),
+                'layer' : self.mc.layer(layerindex),
+                'addoutput' : self.maxpdlg.addToCanvas()
+            }
+            worker = MaxPWorker(info)
+            Broker.startWorker(worker)
 
     def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
                                             duration=None):
