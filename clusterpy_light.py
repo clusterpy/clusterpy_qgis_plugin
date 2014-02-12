@@ -98,6 +98,7 @@ class clusterpy_light:
         result = self.maxpdlg.exec_()
         layerindex = self.maxpdlg.layer_combo.currentIndex()
         if result == 1 and layerindex > -1:
+            layerindex = self.maxpdlg.layer_combo.currentIndex()
             messagebar = self.iface.messageBar()
             attrname = self.maxpdlg.attribute_combo.currentText()
             thresholdattr = self.maxpdlg.threshold_attr_combo.currentText()
@@ -106,6 +107,7 @@ class clusterpy_light:
             tabumax = self.maxpdlg.tabumax_spin.value()
             tabusize = self.maxpdlg.tabulength_spin.value()
 
+            output_path = self.maxpdlg.layer_path.text()
             layer = self.mc.layer(layerindex)
             provider = layer.dataProvider()
             maxpfield = QgsField(name = "MAXP", type = 2)
@@ -129,9 +131,9 @@ class clusterpy_light:
 
             valid, islands = validtopology(clspyfeatures)
             if not valid:
-                messagebar.pushMessage("Topology Error",
-                                        self.ERROR_MSG + str(islands),
-                                        level=QgsMessageBar.CRITICAL)
+                self.showMessage("Topology Error",
+                            self.ERROR_MSG + str(islands),
+                            level=QgsMessageBar.CRITICAL)
                 return
             regions = execmaxp(clspyfeatures,
                                     threshold,
@@ -139,7 +141,6 @@ class clusterpy_light:
                                     tabusize,
                                     tabumax)
 
-            output_path = self.maxpdlg.layer_path.text()
             newlayer = QgsVectorFileWriter( output_path,
                                             None,
                                             newfields,
@@ -157,10 +158,12 @@ class clusterpy_light:
             del newlayer
             if self.maxpdlg.addToCanvas():
                 addShapeToCanvas(output_path)
-            messagebar.pushMessage("Clusterpy",
-                                    self.DONE_MSG,
-                                    level=QgsMessageBar.INFO,
-                                    duration = 3)
+            self.showMessage("Clusterpy", self.DONE_MSG, duration = 3)
+
+    def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
+                                            duration=None):
+        messagebar = self.iface.messageBar()
+        messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
     def minp(self):
     #    # show the dialog
