@@ -107,7 +107,7 @@ class clusterpy_light:
         messagebar = self.iface.messageBar()
         messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
-    def addShape(self, shapefilepath)
+    def addShape(self, shapefilepath):
         addShapeToCanvas(shapefilepath)
 
     #def minp(self):
