@@ -19,14 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
-# Import the PyQt and QGIS libraries
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import QgsMessageBar
-# Initialize Qt resources from file resources.py
 import resources_rc
-# Import the code for the dialog
 from clusterpy_lightdialog import maxpDialog, minpDialog, aboutDialog
 import os.path
 
@@ -40,11 +37,8 @@ class clusterpy_light:
     DONE_MSG = "Finish"
 
     def __init__(self, iface):
-        # Save reference to the QGIS interface
         self.iface = iface
-        # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        # initialize locale
         locale = QSettings().value("locale/userLocale")[0:2]
         localePath = os.path.join(self.plugin_dir,
                                     'i18n',
@@ -56,13 +50,11 @@ class clusterpy_light:
 
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        # Create the dialog (after translation) and keep reference
         self.mc = self.iface.mapCanvas()
         self.maxpdlg = maxpDialog()
         self.maxpdlg.mc = self.mc
 
         self.aboutdlg = aboutDialog()
-        #self.minpdlg = minpDialog()
 
     def initGui(self):
         default_icon = QIcon(":/uifiles/clusterpy.png")
@@ -72,21 +64,16 @@ class clusterpy_light:
                                                     self.iface.mainWindow())
         self.maxpaction.triggered.connect(self.maxp)
 
-        #self.minpaction = QAction(default_icon, u"Min-p Algorithm",
-                                                    #self.iface.mainWindow())
-        #self.minpaction.triggered.connect(self.minp)
         self.aboutaction = QAction(rise_icon, u"About RISE",
                                                     self.iface.mainWindow())
         self.aboutaction.triggered.connect(self.about)
 
         self.iface.addPluginToMenu(self.CLSP_MENU, self.maxpaction)
         self.iface.addPluginToMenu(self.CLSP_MENU, self.aboutaction)
-        #self.iface.addPluginToMenu(self.CLSP_MENU, self.minpaction)
 
     def unload(self):
         self.iface.removePluginMenu(self.CLSP_MENU, self.maxpaction)
         self.iface.removePluginMenu(self.CLSP_MENU, self.aboutaction)
-        #self.iface.removePluginMenu(self.CLSP_MENU, self.minpaction)
 
     def about(self):
         self.aboutdlg.show()
@@ -165,11 +152,14 @@ class clusterpy_light:
         messagebar = self.iface.messageBar()
         messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
-    def minp(self):
+    def addShape(self, shapefilepath)
+        addShapeToCanvas(shapefilepath)
+
+    #def minp(self):
     #    # show the dialog
     #    self.minpdlg.show()
     #    # Run the dialog event loop
     #    result = self.minpdlg.exec_()
     #    # See if OK was pressed
     #    if result == 1:
-            pass
+    #        pass
