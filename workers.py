@@ -52,8 +52,9 @@ class MaxPWorker(Worker):
                                 self.threshold,
                                 self.maxit,
                                 self.tabusize,
-                                self.tabumax)
-
+                                self.tabumax,
+                                self.progress.emit)
+            self.progress.emit(95.0)
             newlayer = QgsVectorFileWriter( self.output_path,
                                                         None,
                                                         newfields,
