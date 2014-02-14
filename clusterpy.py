@@ -152,7 +152,11 @@ class ClusterpyRegion(SetOfFeatures):
                         canremove = True
         return canremove
 
-def execmaxp(layer, threshold, maxit, tabulength, maxtabusteps):
+def sendprogress(progressobj, value):
+    if progressobj is not None:
+        progressobj(value)
+
+def execmaxp(layer, threshold, maxit, tabulength, maxtabusteps, progress=None):
     """ Max-p clustering algorithm
     Parameters are:
     [1] layer       -> A dictionary where keys are feature IDs and values are
@@ -173,6 +177,7 @@ def execmaxp(layer, threshold, maxit, tabulength, maxtabusteps):
     REQTHRESHOLD = threshold
     feasiblepartitions = list()
     maxp = 0
+    sendprogress(progress, 10.0)
     for _tmp in xrange(maxit):
         partitions, enclaves, assignedfeatures = growregions()
         numregions = len(partitions)
@@ -182,7 +187,7 @@ def execmaxp(layer, threshold, maxit, tabulength, maxtabusteps):
             maxp = numregions
         elif numregions == maxp:
             feasiblepartitions.append((partitions, enclaves, assignedfeatures))
-
+    sendprogress(progress, 50.0)
     bestobjfunction = MAXNUM
     bestpartition = None
     for partitions, enclaves, assigned in feasiblepartitions:
@@ -191,7 +196,7 @@ def execmaxp(layer, threshold, maxit, tabulength, maxtabusteps):
         if regions.objfunction < bestobjfunction or bestpartition == None:
             bestobjfunction = regions.objfunction
             bestpartition = regions.clone()
-
+    sendprogress(progress, 90.0)
     return bestpartition.regions
 
 def growregions():
