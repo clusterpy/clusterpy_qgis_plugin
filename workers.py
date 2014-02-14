@@ -6,7 +6,7 @@ from clusterpy import ClusterpyFeature, execmaxp, validtopology
 
 class Worker(QtCore.QObject):
     finished = QtCore.pyqtSignal(bool, basestring)
-    progress = QtCore.pyqtSignal(basestring)
+    progress = QtCore.pyqtSignal(float)
 
     def __init__(self):
         QtCore.QObject.__init__(self)
@@ -47,6 +47,7 @@ class MaxPWorker(Worker):
         outputmsg = None
         valid, islands = validtopology(clspyfeatures)
         if valid:
+            self.progress.emit(1.0)
             regions = execmaxp(clspyfeatures,
                                 self.threshold,
                                 self.maxit,
@@ -71,5 +72,5 @@ class MaxPWorker(Worker):
             outputmsg = self.output_path
         else:
             outputmsg = self.ERROR_MSG + str(islands)
-
+        self.progress.emit(100.0)
         self.finished.emit(valid, outputmsg)

@@ -145,11 +145,11 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
                                         outputmsg,
                                         level=QgsMessageBar.CRITICAL)
 
-    def updateProgress(self, msg):
-        print "progress:", msg
+    def updateProgress(self, value):
+        self.progressBar.setValue(value)
 
     def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
-                                            duration=10):
+                                            duration=5):
         messagebar = self.iface.messageBar()
         messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
