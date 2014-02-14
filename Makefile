@@ -37,7 +37,7 @@ PY_FILES = clusterpy_light.py clusterpy_lightdialog.py __init__.py
 
 EXTRAS = icon.png metadata.txt
 
-UI_FILES = uifiles/ui_maxp.py uifiles/ui_minp.py uifiles/ui_about.py
+UI_FILES = uifiles/ui_maxp.py uifiles/ui_about.py
 
 RESOURCE_FILES = resources_rc.py
 
