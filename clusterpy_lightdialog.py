@@ -22,21 +22,13 @@
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt
+from qgis.gui import QgsMessageBar
 from uifiles.ui_maxp import Ui_maxp_ui
-from uifiles.ui_minp import Ui_minp_ui
 from uifiles.ui_about import Ui_about
 from plugin_utils import saveDialog
 from os import path
-
-class minpDialog(QtGui.QDialog, Ui_minp_ui):
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
-        # Set up the user interface from Designer.
-        # After setupUI you can access any designer object by doing
-        # self.<objectname>, and you can use autoconnect slots - see
-        # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
-        # #widgets-and-dialogs-with-auto-connect
-        self.setupUi(self)
+from plugin_utils import addShapeToCanvas
+import workers
 
 class aboutDialog(QtGui.QDialog, Ui_about):
     def __init__(self):
@@ -47,6 +39,10 @@ class aboutDialog(QtGui.QDialog, Ui_about):
         self.help_browser.setHtml(abouthtml)
 
 class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
+    ERROR_MSG = u"There are features from the shapefile that are disconnected. \
+                Check the following areas for errors in the geometry: "
+    DONE_MSG = "Finish"
+
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.setupUi(self)
@@ -108,8 +104,52 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
         self.layer_path.setText(fileName)
 
     def addToCanvas(self):
-        add = False
         if self.add_canvas.checkState() == Qt.Checked:
-            add = True
-        return add
+            addShapeToCanvas(self.layer_path.text())
+
+    def accept(self):
+        layerindex = self.layer_combo.currentIndex()
+        if layerindex < 0:
+            return
+        layer = self.mc.layer(layerindex)
+        info = {
+            'attrname' : self.attribute_combo.currentText(),
+            'thresholdattr' : self.threshold_attr_combo.currentText(),
+            'threshold' : self.threshold_spin.value(),
+            'maxit' : self.maxit_spin.value(),
+            'tabumax' : self.tabumax_spin.value(),
+            'tabusize' : self.tabulength_spin.value(),
+            'output_path' : self.layer_path.text(),
+            'layer' : layer
+        }
+        worker = workers.MaxPWorker(info)
+        thread = QtCore.QThread(self)
+        worker.moveToThread(thread)
+        worker.finished.connect(self.finishRun)
+        worker.progress.connect(self.updateProgress)
+        thread.started.connect(worker.run)
+        self.thread = thread
+        self.worker = worker
+        thread.start()
+
+    def finishRun(self, success, outputmsg):
+        self.worker.deleteLater()
+        self.thread.quit()
+        self.thread.wait()
+        self.thread.deleteLater()
+        if success:
+            self.addToCanvas()
+            self.showMessage("Clusterpy", "Success. File:" + outputmsg )
+        else:
+            self.showMessage("Clusterpy: Error",
+                                        outputmsg,
+                                        level=QgsMessageBar.CRITICAL)
+
+    def updateProgress(self, msg):
+        print "progress:", msg
+
+    def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
+                                            duration=10):
+        messagebar = self.iface.messageBar()
+        messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
