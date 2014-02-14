@@ -22,20 +22,12 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
-from qgis.gui import QgsMessageBar
 import resources_rc
 from clusterpy_lightdialog import maxpDialog, aboutDialog
 import os.path
 
-from clusterpy import ClusterpyFeature, execmaxp, validtopology
-from plugin_utils import addShapeToCanvas
-import workers
-
 class clusterpy_light:
     CLSP_MENU = u"&Clusterpy - Spatially constrained clustering"
-    ERROR_MSG = u"There are features from the shapefile that are disconnected. \
-                Check the following areas for errors in the geometry: "
-    DONE_MSG = "Finish"
 
     def __init__(self, iface):
         self.iface = iface
@@ -54,6 +46,7 @@ class clusterpy_light:
         self.mc = self.iface.mapCanvas()
         self.maxpdlg = maxpDialog()
         self.maxpdlg.mc = self.mc
+        self.maxpdlg.iface = self.iface
 
         self.aboutdlg = aboutDialog()
 
@@ -83,30 +76,5 @@ class clusterpy_light:
         self.maxpdlg.show()
         self.maxpdlg.layer_combo.clear()
         self.maxpdlg.layer_combo.addItems([x.name() for x in self.mc.layers()])
-        result = self.maxpdlg.exec_()
-        layerindex = self.maxpdlg.layer_combo.currentIndex()
-        if result == 1 and layerindex > -1:
-            layerindex = self.maxpdlg.layer_combo.currentIndex()
-            info = {
-                'attrname' : self.maxpdlg.attribute_combo.currentText(),
-                'thresholdattr' :
-                               self.maxpdlg.threshold_attr_combo.currentText(),
-                'threshold' : self.maxpdlg.threshold_spin.value(),
-                'maxit' : self.maxpdlg.maxit_spin.value(),
-                'tabumax' : self.maxpdlg.tabumax_spin.value(),
-                'tabusize' : self.maxpdlg.tabulength_spin.value(),
-                'output_path' : self.maxpdlg.layer_path.text(),
-                'layer' : self.mc.layer(layerindex),
-                'addoutput' : self.maxpdlg.addToCanvas()
-            }
-            worker = MaxPWorker(info)
-            Broker.startWorker(worker)
-
-    def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
-                                            duration=None):
-        messagebar = self.iface.messageBar()
-        messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
-
-    def addShape(self, shapefilepath):
-        addShapeToCanvas(shapefilepath)
+        self.maxpdlg.exec_()
 
