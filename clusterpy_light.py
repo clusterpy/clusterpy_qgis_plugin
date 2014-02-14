@@ -24,7 +24,7 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import QgsMessageBar
 import resources_rc
-from clusterpy_lightdialog import maxpDialog, minpDialog, aboutDialog
+from clusterpy_lightdialog import maxpDialog, aboutDialog
 import os.path
 
 from clusterpy import ClusterpyFeature, execmaxp, validtopology
@@ -110,11 +110,3 @@ class clusterpy_light:
     def addShape(self, shapefilepath):
         addShapeToCanvas(shapefilepath)
 
-    #def minp(self):
-    #    # show the dialog
-    #    self.minpdlg.show()
-    #    # Run the dialog event loop
-    #    result = self.minpdlg.exec_()
-    #    # See if OK was pressed
-    #    if result == 1:
-    #        pass
