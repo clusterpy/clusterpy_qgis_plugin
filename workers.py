@@ -1,32 +1,12 @@
 from qgis.core import *
 from PyQt4 import QtCore, QtGui
 
-__all__ = ['Broker', 'MaxPWorker']
-
-class Broker():
-    def startWorker(self, worker):
-        child = QtCore.QThread(self)
-        worker.moveToThread(child)
-        worker.finished.connect(finishWorker)
-        thread.started.connect(worker.run)
-        thread.start()
-        self.thread = thread
-        self.worker = worker
-
-    def finishWorker(self, success, outputmsg):
-        self.worker.deleteLater()
-        self.thread.quit()
-        self.thread.wait()
-        self.thead.deleteLater()
-        if success:
-            ## emit signal to add to canvas
-            pass
-        else:
-            # we have an error, emit signal to display errormsg
-            pass
+__all__ = ['MaxPWorker']
+from clusterpy import ClusterpyFeature, execmaxp, validtopology
 
 class Worker(QtCore.QObject):
-    finished = QtCore.pyqtSignal(object, basestring)
+    finished = QtCore.pyqtSignal(bool, basestring)
+    progress = QtCore.pyqtSignal(basestring)
 
     def __init__(self):
         QtCore.QObject.__init__(self)
@@ -39,7 +19,7 @@ class MaxPWorker(Worker):
                 Check the following areas for errors in the geometry: "
 
     def __init__(self, info={}):
-        Worker.__init__(self)
+        super(Worker, self).__init__()
         for prop in info:
             self.__dict__[prop] = info[prop]
 
