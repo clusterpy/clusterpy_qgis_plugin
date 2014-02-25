@@ -16,7 +16,8 @@ class Worker(QtCore.QObject):
 
 class MaxPWorker(Worker):
     ERROR_MSG = u"There are features from the shapefile that are disconnected. \
-                Check the following areas for errors in the geometry: "
+                Check the areas identified with the following IDs for errors \
+                in the geometry: "
 
     def __init__(self, info={}):
         super(Worker, self).__init__()
@@ -72,6 +73,6 @@ class MaxPWorker(Worker):
             del newlayer
             outputmsg = self.output_path
         else:
-            outputmsg = self.ERROR_MSG + str(islands)
+            outputmsg = self.ERROR_MSG + str(map(str, islands))
         self.progress.emit(100.0)
         self.finished.emit(valid, outputmsg)

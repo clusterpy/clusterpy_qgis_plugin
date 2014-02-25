@@ -39,8 +39,6 @@ class aboutDialog(QtGui.QDialog, Ui_about):
         self.help_browser.setHtml(abouthtml)
 
 class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
-    ERROR_MSG = u"There are features from the shapefile that are disconnected. \
-                Check the following areas for errors in the geometry: "
     DONE_MSG = "Finish"
 
     def __init__(self):
@@ -149,13 +147,13 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
             self.addToCanvas()
             self.showMessage("Clusterpy", "Success. File:" + outputmsg,
                                 duration=10 )
-            self.layer_path.clear()
-            self.add_canvas.setChecked(Qt.Unchecked)
-            self.updateProgress(0)
         else:
-            self.showMessage("Clusterpy: Error",
+            self.showMessage("Clusterpy Error",
                                         outputmsg,
                                         level=QgsMessageBar.CRITICAL)
+        self.layer_path.clear()
+        self.add_canvas.setChecked(Qt.Unchecked)
+        self.updateProgress(0)
 
     def updateProgress(self, value):
         self.progressBar.setValue(value)
