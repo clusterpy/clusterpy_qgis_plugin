@@ -39,8 +39,6 @@ class aboutDialog(QtGui.QDialog, Ui_about):
         self.help_browser.setHtml(abouthtml)
 
 class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
-    ERROR_MSG = u"There are features from the shapefile that are disconnected. \
-                Check the following areas for errors in the geometry: "
     DONE_MSG = "Finish"
 
     def __init__(self):
@@ -108,48 +106,60 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
             addShapeToCanvas(self.layer_path.text())
 
     def accept(self):
-        layerindex = self.layer_combo.currentIndex()
-        if layerindex < 0:
-            return
-        layer = self.mc.layer(layerindex)
-        info = {
-            'attrname' : self.attribute_combo.currentText(),
-            'thresholdattr' : self.threshold_attr_combo.currentText(),
-            'threshold' : self.threshold_spin.value(),
-            'maxit' : self.maxit_spin.value(),
-            'tabumax' : self.tabumax_spin.value(),
-            'tabusize' : self.tabulength_spin.value(),
-            'output_path' : self.layer_path.text(),
-            'layer' : layer
-        }
-        worker = workers.MaxPWorker(info)
-        thread = QtCore.QThread(self)
-        worker.moveToThread(thread)
-        worker.finished.connect(self.finishRun)
-        worker.progress.connect(self.updateProgress)
-        thread.started.connect(worker.run)
-        self.thread = thread
-        self.worker = worker
-        thread.start()
+        if self.layer_path.text() == "":
+            QtGui.QMessageBox.warning(self,
+                                "Clusterpy",
+                                "Please specify output shapefile")
+        else:
+            self.okbutton = self.buttonBox.button( QtGui.QDialogButtonBox.Ok )
+            self.okbutton.setEnabled(False)
+            layerindex = self.layer_combo.currentIndex()
+            if layerindex < 0:
+                return
+            layer = self.mc.layer(layerindex)
+            info = {
+                'attrname' : self.attribute_combo.currentText(),
+                'thresholdattr' : self.threshold_attr_combo.currentText(),
+                'threshold' : self.threshold_spin.value(),
+                'maxit' : self.maxit_spin.value(),
+                'tabumax' : self.tabumax_spin.value(),
+                'tabusize' : self.tabulength_spin.value(),
+                'output_path' : self.layer_path.text(),
+                'layer' : layer
+            }
+            worker = workers.MaxPWorker(info)
+            thread = QtCore.QThread(self)
+            worker.moveToThread(thread)
+            worker.finished.connect(self.finishRun)
+            worker.progress.connect(self.updateProgress)
+            thread.started.connect(worker.run)
+            self.thread = thread
+            self.worker = worker
+            thread.start()
 
     def finishRun(self, success, outputmsg):
         self.worker.deleteLater()
         self.thread.quit()
         self.thread.wait()
         self.thread.deleteLater()
+        self.okbutton.setEnabled(True)
         if success:
             self.addToCanvas()
-            self.showMessage("Clusterpy", "Success. File:" + outputmsg )
+            self.showMessage("Clusterpy", "Success. File:" + outputmsg,
+                                duration=10 )
         else:
-            self.showMessage("Clusterpy: Error",
+            self.showMessage("Clusterpy Error",
                                         outputmsg,
                                         level=QgsMessageBar.CRITICAL)
+        self.layer_path.clear()
+        self.add_canvas.setChecked(Qt.Unchecked)
+        self.updateProgress(0)
 
     def updateProgress(self, value):
         self.progressBar.setValue(value)
 
     def showMessage(self, msgtype, msgtext, level=QgsMessageBar.INFO,
-                                            duration=5):
+                                            duration=30):
         messagebar = self.iface.messageBar()
         messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
 
