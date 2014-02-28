@@ -17,8 +17,8 @@ email=software@rise-group.org
 tags=Clusterpy,Clustering,RISE Group
 
 homepage=http://www.rise-group.org
-tracker=https://www.github.com/risegroup/clusterpy-qgis-plugin/issues
-repository=https://www.github.com/risegroup/clusterpy-qgis-plugin
+tracker=https://www.github.com/clusterpy/clusterpy-qgis-plugin/issues
+repository=https://www.github.com/clusterpy/clusterpy-qgis-plugin
 icon=uifiles/icon.png
 experimental=False
 
