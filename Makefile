@@ -35,7 +35,7 @@ PLUGINNAME = clusterpy_light
 
 PY_FILES = clusterpy_light.py clusterpy_lightdialog.py __init__.py
 
-EXTRAS = icon.png metadata.txt
+EXTRAS = uifiles/icon.png metadata.txt
 
 UI_FILES = uifiles/ui_maxp.py uifiles/ui_about.py
 
