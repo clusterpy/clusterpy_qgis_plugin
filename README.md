@@ -10,11 +10,12 @@ a free and Open Source Geographic Information System.
  * more algorithms soon.
 
 ##Installation
-Available from the QGIS plugin repository.
+ * Available from the QGIS plugin repository.
+ * Or you can download one of the releases (not the source code) and unzip it into the QGIS plugins directory `~/.qgis2/python/plugins`.
 
 ##More information
-For plugin developer information, see the PyQGIS Developer Cookbook at:
-http://www.qgis.org/pyqgis-cookbook/index.html
+ * For plugin developer information, see the [PyQGIS Developer Cookbook](http://www.qgis.org/pyqgis-cookbook/index.html)
+ * For information about the algorithms and Clusterpy, visit the full [Clusterpy-doc](http://www.rise-group.org/risem/clusterpy/index.html#) 
 
 ##Cite the plugin
 If you are interested in citing this plugin, you can use:
