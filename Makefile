@@ -31,12 +31,15 @@ TRANSLATIONS =
 
 # global
 
-PLUGINNAME = clusterpy_light
+PLUGINNAME = clusterpy_qgis_plugin
 
-PY_FILES = clusterpy_light.py clusterpy_lightdialog.py __init__.py
+PY_FILES = clusterpy_light.py clusterpy_lightdialog.py __init__.py clusterpy.py plugin_utils.py workers.py
 
-EXTRAS = uifiles/icon.png metadata.txt
+EXTRAS = metadata.txt
 
+UI_FILESD = uifiles
+
+# UI_FILES are the .py files created from .ui that will be removed on a clean
 UI_FILES = uifiles/ui_maxp.py uifiles/ui_about.py
 
 RESOURCE_FILES = resources_rc.py
@@ -60,7 +63,7 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 deploy: compile doc transcompile
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vf $(UI_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	cp -vfr $(UI_FILESD) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
