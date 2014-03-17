@@ -10,7 +10,7 @@ a free and Open Source Geographic Information System.
  * more algorithms soon.
 
 ##Installation
- * Available from the QGIS plugin repository.
+ * ~~Available from the QGIS plugin repository.~~ (working on it)
  * Or you can download one of the releases (not the source code) and unzip it into the QGIS plugins directory `~/.qgis2/python/plugins`.
 
 ##More information
