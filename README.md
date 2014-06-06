@@ -15,18 +15,18 @@ a free and Open Source Geographic Information System.
 
 ##More information
  * For plugin developer information, see the [PyQGIS Developer Cookbook](http://www.qgis.org/pyqgis-cookbook/index.html)
- * For information about the algorithms and Clusterpy, visit the full [Clusterpy-doc](http://www.rise-group.org/risem/clusterpy/index.html#) 
+ * For information about the algorithms and Clusterpy, visit the full [Clusterpy-doc](http://www.rise-group.org/risem/clusterpy/index.html#)
 
 ##Cite the plugin
 If you are interested in citing this plugin, you can use:
 
-Duque, J.C.; Botero, Sergio (2014). Clusterpy QGIS plugin, Version 1.0 RiSE-group (Research in Spatial Economics). EAFIT University. http://www.rise-group.org.
+Duque, J.C.; Botero, Sergio (2014). Clusterpy QGIS plugin, Version 0.11-preview RiSE-group (Research in Spatial Economics). EAFIT University. http://www.rise-group.org.
 
 Or this BibTeX entry:
 ```
 @Manual{clusterpy-qgis-plugin,
 title = {Clusterpy QGIS plugin,
-{Version} 1.0.0},
+{Version} 0.11-preview},
 author = {Duque, Juan C. and Botero, Sergio},
 organization = {RiSE-group (Research in Spatial Economics). EAFIT University.},
 address = {Colombia},
