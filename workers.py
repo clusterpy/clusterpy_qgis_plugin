@@ -31,6 +31,7 @@ class MaxPWorker(Worker):
         newfields.extend(provider.fields())
         newfields.append(maxpfield)
 
+        bad_value = -1
         clspyfeatures = {}
         for feat in provider.getFeatures():
             uid = feat.id()
@@ -42,37 +43,48 @@ class MaxPWorker(Worker):
             neighbors.discard(uid)
             thresholdval = feat.attribute(self.thresholdattr)
             attributeval = feat.attribute(self.attrname)
+
+            if thresholdval == None or attributeval == None:
+                bad_value = uid
+                break
+
             clspyfeatures[uid] = ClusterpyFeature(uid, thresholdval,
                                                 neighbors, attributeval)
 
         outputmsg = None
-        valid, islands = validtopology(clspyfeatures)
-        if valid:
-            self.progress.emit(1.0)
-            regions = execmaxp(clspyfeatures,
-                                self.threshold,
-                                self.maxit,
-                                self.tabusize,
-                                self.tabumax,
-                                self.progress.emit)
-            self.progress.emit(95.0)
-            newlayer = QgsVectorFileWriter( self.output_path,
-                                                        None,
-                                                        newfields,
-                                                        provider.geometryType(),
-                                                        provider.crs())
-
-            for area in self.layer.getFeatures():
-                newarea = QgsFeature()
-                newarea.setGeometry(area.geometry())
-                attrs = area.attributes()
-                attrs.append(regions[area.id()])
-                newarea.setAttributes(attrs)
-                newlayer.addFeature(newarea)
-
-            del newlayer
-            outputmsg = self.output_path
+        valid = True
+        if bad_value != -1:
+            valid = False
+            outputmsg = "Please review feature with ID: " + str(bad_value) +\
+            " and assign a numeric value to the NULL or empty attributes."
         else:
-            outputmsg = self.ERROR_MSG + str(map(str, islands))
+            valid, islands = validtopology(clspyfeatures)
+            if valid:
+                self.progress.emit(1.0)
+                regions = execmaxp(clspyfeatures,
+                                    self.threshold,
+                                    self.maxit,
+                                    self.tabusize,
+                                    self.tabumax,
+                                    self.progress.emit)
+                self.progress.emit(95.0)
+                newlayer = QgsVectorFileWriter( self.output_path,
+                                                            None,
+                                                            newfields,
+                                                            provider.geometryType(),
+                                                            provider.crs())
+
+                for area in self.layer.getFeatures():
+                    newarea = QgsFeature()
+                    newarea.setGeometry(area.geometry())
+                    attrs = area.attributes()
+                    attrs.append(regions[area.id()])
+                    newarea.setAttributes(attrs)
+                    newlayer.addFeature(newarea)
+
+                del newlayer
+                outputmsg = self.output_path
+            else:
+                outputmsg = self.ERROR_MSG + str(map(str, islands))
         self.progress.emit(100.0)
         self.finished.emit(valid, outputmsg)

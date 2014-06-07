@@ -39,7 +39,6 @@ class aboutDialog(QtGui.QDialog, Ui_about):
         self.help_browser.setHtml(abouthtml)
 
 class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
-    DONE_MSG = "Finish"
 
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -47,6 +46,10 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
         self.connect(self.threshold_attr_combo,
                         QtCore.SIGNAL("currentIndexChanged(int)"),
                         self.updateThresholdLimits)
+
+        self.connect(self.attribute_combo,
+                QtCore.SIGNAL("currentIndexChanged(int)"),
+                self.checkAttrValues)
 
         self.connect(self.layer_combo,
                         QtCore.SIGNAL("currentIndexChanged(int)"),
@@ -77,18 +80,46 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
             self.attribute_combo.addItems(fieldNames)
             self.threshold_attr_combo.addItems(fieldNames2)
 
+    def checkAttrValues(self, newindex):
+        if newindex > -1:
+            attributeName = self.attribute_combo.currentText()
+            self.checkAllValues(attributeName)
+
+    def checkAllValues(self, attributeName):
+        layerIndex = self.layer_combo.currentIndex()
+        fiterator = self.mc.layer(layerIndex).dataProvider().getFeatures()
+
+        valid = True
+        maximum = 0
+        minimum = 99999
+        for feature in fiterator:
+            val = feature.attribute(attributeName)
+            try:
+                minimum = val if val < minimum else minimum
+                maximum += val
+            except TypeError:
+                valid = False
+
+        if not valid:
+            null_message  = "Some values are missing.\n" +\
+            "Check the Attribute Table for NULL or empty values.\n" +\
+            "Column: " + str(attributeName) + "\n" +\
+            "Please update the Attribute Table in order to run Max-p."
+
+            # Showing a message box might be better to get the user's attention
+            QtGui.QMessageBox.warning(self, "Clusterpy", null_message)
+            #self.showMessage("Clusterpy Error", "NULL or Empty Attrs",
+            #    level=QgsMessageBar.CRITICAL)
+
+        return minimum, maximum
+
     def updateThresholdLimits(self, newindex):
         if newindex > -1:
             layerIndex = self.layer_combo.currentIndex()
             fiterator = self.mc.layer(layerIndex).dataProvider().getFeatures()
             attributeName = self.threshold_attr_combo.currentText()
 
-            maximum = 0
-            minimum = 99999
-            for feature in fiterator:
-                val = feature.attribute(attributeName)
-                minimum = val if val < minimum else minimum
-                maximum += val
+            minimum, maximum = self.checkAllValues(attributeName)
 
             self.threshold_spin.setMinimum(minimum)
             self.threshold_spin.setMaximum(maximum)
@@ -145,8 +176,8 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
         self.okbutton.setEnabled(True)
         if success:
             self.addToCanvas()
-            output_msg = "Success. New column added to attribute table. " + outputmsg
-            self.showMessage("Clusterpy", output_msg, duration=0 )
+            msg = "Success. New column added to attribute table. " + outputmsg
+            self.showMessage("Clusterpy", msg, duration=0 )
         else:
             self.showMessage("Clusterpy Error",
                                         outputmsg,
