@@ -145,8 +145,8 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
         self.okbutton.setEnabled(True)
         if success:
             self.addToCanvas()
-            self.showMessage("Clusterpy", "Success. File:" + outputmsg,
-                                duration=10 )
+            output_msg = "Success. New column added to attribute table. " + outputmsg
+            self.showMessage("Clusterpy", output_msg, duration=0 )
         else:
             self.showMessage("Clusterpy Error",
                                         outputmsg,
@@ -162,4 +162,3 @@ class maxpDialog(QtGui.QDialog, Ui_maxp_ui):
                                             duration=30):
         messagebar = self.iface.messageBar()
         messagebar.pushMessage(msgtype, msgtext, level=level, duration=duration)
-
