@@ -11,7 +11,7 @@ a free and Open Source Geographic Information System.
 
 ##Installation
  * ~~Available from the QGIS plugin repository.~~ (working on it)
- * Or you can download one of the releases (not the source code) and unzip it into the QGIS plugins directory `~/.qgis2/python/plugins`.
+ * Download one of the releases ([Green Button Here](https://github.com/clusterpy/clusterpy_qgis_plugin/releases)) and unzip it into the QGIS plugins directory `~/.qgis2/python/plugins`.
 
 ##More information
  * For plugin developer information, see the [PyQGIS Developer Cookbook](http://www.qgis.org/pyqgis-cookbook/index.html)
