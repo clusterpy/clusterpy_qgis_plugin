@@ -73,4 +73,3 @@ def saveDialog( parent, filtering="Shapefiles (*.shp *.SHP)"):
     files = fileDialog.selectedFiles()
     settings.setValue("/UI/lastShapefileDir", QFileInfo( unicode( files[0] ) ).absolutePath() )
     return ( unicode( files[0] ), unicode( fileDialog.encoding() ) )
-

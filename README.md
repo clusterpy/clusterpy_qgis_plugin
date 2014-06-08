@@ -20,13 +20,13 @@ a free and Open Source Geographic Information System.
 ##Cite the plugin
 If you are interested in citing this plugin, you can use:
 
-Duque, J.C.; Botero, Sergio (2014). Clusterpy QGIS plugin, Version 0.13-preview RiSE-group (Research in Spatial Economics). EAFIT University. http://www.rise-group.org.
+Duque, J.C.; Botero, Sergio (2014). Clusterpy QGIS plugin, Version 0.14-preview RiSE-group (Research in Spatial Economics). EAFIT University. http://www.rise-group.org.
 
 Or this BibTeX entry:
 ```
 @Manual{clusterpy-qgis-plugin,
 title = {Clusterpy QGIS plugin,
-{Version} 0.13-preview},
+{Version} 0.14-preview},
 author = {Duque, Juan C. and Botero, Sergio},
 organization = {RiSE-group (Research in Spatial Economics). EAFIT University.},
 address = {Colombia},

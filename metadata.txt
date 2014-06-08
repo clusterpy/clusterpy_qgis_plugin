@@ -4,7 +4,7 @@
 name=Clusterpy - Spatially constrained clustering
 qgisMinimumVersion=2.0
 description=Clusterpy plugin version for QGIS
-version=0.13-preview
+version=0.14-preview
 author=RISE Group Universidad EAFIT
 email=software@rise-group.org
 
@@ -14,11 +14,11 @@ email=software@rise-group.org
 # changelog=
 
 # tags are comma separated with spaces allowed
-tags=Clusterpy,Clustering,RISE Group
+tags=Clusterpy,Clustering,RISE Group,cluster
 
 homepage=http://www.rise-group.org
-tracker=https://www.github.com/clusterpy/clusterpy-qgis-plugin/issues
-repository=https://www.github.com/clusterpy/clusterpy-qgis-plugin
+tracker=https://www.github.com/clusterpy/clusterpy_qgis_plugin/issues
+repository=https://www.github.com/clusterpy/clusterpy_qgis_plugin
 icon=uifiles/icon.png
 experimental=False
 
