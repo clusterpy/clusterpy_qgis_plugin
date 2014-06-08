@@ -1,3 +1,6 @@
+# coding=utf-8
+# Clusterpy QGIS plugin - (C) 2014, RiSE Group
+
 from qgis.core import *
 from PyQt4 import QtCore, QtGui
 
@@ -26,7 +29,9 @@ class MaxPWorker(Worker):
 
     def run(self):
         provider = self.layer.dataProvider()
-        maxpfield = QgsField(name = "MAXP", type = 2)
+        curr = [ fl.name() for fl in provider.fields() ]
+        nfn = newColumnName(curr)
+        maxpfield = QgsField(name = nfn, type = 2)
         newfields = QgsFields()
         newfields.extend(provider.fields())
         newfields.append(maxpfield)
@@ -88,3 +93,20 @@ class MaxPWorker(Worker):
                 outputmsg = self.ERROR_MSG + str(map(str, islands))
         self.progress.emit(100.0)
         self.finished.emit(valid, outputmsg)
+
+# Get the name of the next MAXP execution column.
+def newColumnName(fields, basename = 'MAXP'):
+    last = -1
+    for fld in fields:
+        if fld.startswith(basename):
+            try:
+                cnt = int(fld[len(basename):])
+                last = cnt if cnt > last else last
+            except ValueError:
+                last = 0
+
+    num = ""
+    if last >= 0:
+        num = str(last + 1)
+
+    return basename + num
