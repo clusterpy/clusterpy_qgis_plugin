@@ -4,7 +4,7 @@
 name=Clusterpy - Spatially constrained clustering
 qgisMinimumVersion=2.0
 description=Clusterpy plugin version for QGIS
-version=0.13-preview
+version=0.14-preview
 author=RISE Group Universidad EAFIT
 email=software@rise-group.org
 

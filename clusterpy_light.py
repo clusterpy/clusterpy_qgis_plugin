@@ -77,4 +77,3 @@ class clusterpy_light:
         self.maxpdlg.layer_combo.clear()
         self.maxpdlg.layer_combo.addItems([x.name() for x in self.mc.layers()])
         self.maxpdlg.exec_()
-
