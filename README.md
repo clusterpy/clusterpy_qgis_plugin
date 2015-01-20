@@ -10,7 +10,7 @@ a free and Open Source Geographic Information System.
  * more algorithms soon.
 
 ##Installation
- * ~~Available from the QGIS plugin repository.~~ (working on it)
+ * Available from the QGIS plugin repository.
  * Download one of the releases ([Green Button Here](https://github.com/clusterpy/clusterpy_qgis_plugin/releases)) and unzip it into the QGIS plugins directory `~/.qgis2/python/plugins`.
 
 ##More information
